@@ -21,8 +21,8 @@ __author__ = "nmazz64"
 __url__ = "http://code.google.com/p/previewnetworks-xbmc-plugin"
 __svn_url__ = "http://previewnetworks-xbmc-plugin.googlecode.com/svn/trunk/"
 __useragent__ = "QuickTime/7.6.5 (qtver=7.6.5;os=Windows NT 5.1Service Pack 3)"
-__version__ = "2.0.0"
-__svn_revision__ = "$Revision: 1$"
+__version__ = "2.0.1"
+__svn_revision__ = "$Revision: 2$"
 __XBMC_Revision__ = "31632"
 
 url_source=None
