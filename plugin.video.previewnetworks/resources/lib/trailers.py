@@ -295,7 +295,7 @@ class Main:
     BASE_CURRENT_URL = ""
     ITEM_CURRENT_URL = ""
     BASE_DATA_PATH = os.path.join( xbmc.translatePath( "special://profile/" ), "addon_data", os.path.basename( os.getcwd() ), "cache" )
-    BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/" ), "addon_data", os.path.basename( os.getcwd(), "cache" ), "trailer_%s.xml" )
+    BASE_CURRENT_SOURCE_PATH = os.path.join( xbmc.translatePath( "special://profile/" ), "addon_data", os.path.basename( os.getcwd()),  "cache" , "trailer_%s.xml" )
 ##    BASE_CURRENT_SOURCE_PATH = xbmc.translatePath( Addon.getAddonInfo( "Profile" ) )
     
     title_option = ""
