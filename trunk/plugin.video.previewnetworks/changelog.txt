@@ -1,5 +1,5 @@
 [B]2.3[/B]
-- compatibility changer for Frodo beta
+- compatibility changes for Frodo beta
 
 [B]2.2.1[/B]
 - Same bugfix[B]2.2[/B]
