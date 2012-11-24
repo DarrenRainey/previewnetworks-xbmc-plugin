@@ -1,3 +1,6 @@
+[B]2.3.1[/B]
+- compatibility changes for Frodo beta
+
 [B]2.3[/B]
 - compatibility changes for Frodo beta
 

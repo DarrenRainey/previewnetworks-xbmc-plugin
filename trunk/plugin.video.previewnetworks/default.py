@@ -21,7 +21,7 @@ __author__ = "nmazz64"
 __url__ = "http://code.google.com/p/previewnetworks-xbmc-plugin"
 __svn_url__ = "http://previewnetworks-xbmc-plugin.googlecode.com/svn/trunk/plugin.video.previewnetworks/"
 __useragent__ = "QuickTime/7.6.5 (qtver=7.6.5;os=Windows NT 5.1Service Pack 3)"
-__version__ = "2.2.0"
+__version__ = "2.2.1"
 __svn_revision__ = "$Revision: 0$"
 __XBMC_Revision__ = "31633"
 
@@ -29,7 +29,6 @@ url_source=None
 
 def check_compatible():
     try:
-        # xbmc.log( "[PLUGIN] '%s: Version - %s-r%s' initialized!" % ( __plugin__, __version__, __svn_revision__.replace( "$", "" ).replace( "Revision", "" ).replace( ":", "" ).strip() ), xbmc.LOGNOTICE )
         # get xbmc revision
         xbmc_rev = int( xbmc.getInfoLabel( "System.BuildVersion" ).split( " r" )[ -1 ] )
         # compatible?
@@ -52,7 +51,7 @@ def categories(root):
     next_icon = os.path.join(Addon.getAddonInfo('path'), 'resources','images', 'next.png')
     genre_icon = os.path.join(Addon.getAddonInfo('path'), 'resources','images', 'genre.png')
     search_icon = os.path.join(Addon.getAddonInfo('path'), 'resources','images', 'search.png')
-    #baseurl="http://%s.feed.previewnetworks.com/v3.1/%s/"
+##   baseurl="http://%s.feed.previewnetworks.com/v3.1/%s/"
     baseurl="http://%s.hdplus.previewnetworks.com/v3.1/%s/"
 
     if root:
@@ -120,14 +119,12 @@ if sys.argv[ 2 ] == "":
         categories(True)
         xbmcplugin.endOfDirectory(int(sys.argv[1]))
 elif ( __name__ == "__main__" ):
-#
     if ( sys.argv[ 2 ].find( "Download_Trailer" ) > 0 ):
         import resources.lib.download as download
         download.Main()
     elif ( sys.argv[ 2 ].startswith( "?OpenSettings" ) ):
         xbmcaddon.Addon( id=__plugin__).openSettings()
         xbmc.executebuiltin( "Container.Refresh" )
-##    if ( sys.argv[ 2 ].startswith( "?url" ) ):
     elif ( sys.argv[ 2 ].find("url") > 0 ):
         paramstring=sys.argv[2]
         if len(paramstring)>0 :
