@@ -27,6 +27,7 @@ class _urlopener( urllib.FancyURLopener ):
 
 # set for user agent
 urllib._urlopener = _urlopener()
+#urllib2._urlopener = _urlopener()
 
 class _Parser:
 
@@ -71,7 +72,7 @@ class _Parser:
                 postdate = ""
                 tmp_postdate = re.findall( "<premiere unix stamp=\"[^\"]*\">(.*?)</premiere>", products[ 0 ] )
                 if ( tmp_postdate ):
-                   postdate = "%s-%s-%s" % ( tmp_postdate[ 8 : ], tmp_postdate[ 5 : 7 ], tmp_postdate[ : 4 ], )
+                   postdate = "%s.%s.%s" % ( tmp_postdate[ 8 : ], tmp_postdate[ 5 : 7 ], tmp_postdate[ : 4 ], )
                 copyright = "preview networks"
                 directors = re.findall( "<director id=\"[^\"]*\">(.*?)</director>", movie )
                 if (directors):
@@ -187,7 +188,8 @@ class _Parser:
                                     releasedate = ""
                                 runtimes = re.findall( "<duration>(.*?)</duration>", file_extract )
                                 if (runtimes):
-                                    runtime = runtimes [ 0 ]
+                                #    runtime = runtimes [ 0 ]
+                                    runtime = runtimes [ 0 ][3:8]
                                 else:
                                     runtime = ""
                                 # add the item to our media list
@@ -195,6 +197,7 @@ class _Parser:
                                     title_option = ' (' + file_type + '/' + file_size + ')'
                                 else:
                                     title_option = ''
+                                title_option = title_option + ' [' + runtime + ']'
                                 #
                                 if (self.settings[ "originaltitle" ]==True):
                                     title_trailer = original_titles[ 0 ] + '   [' + trailer_name[ 0 ] + '] ' + title_option
@@ -257,7 +260,8 @@ class _Parser:
                 release_date = ""
                 year = 0
             # set the key information
-            dirItem.listitem.setInfo( "video", { "Title": video[ "title" ], "Overlay": overlay, "Size": video[ "size" ], "Year": year, "Plot": video[ "plot" ], "PlotOutline": video[ "plot" ], "Genre": video[ "genre" ], "Studio": video[ "studio" ], "Director": video[ "director" ], "Duration": video[ "runtime" ], "Cast": video[ "cast" ], "Date": video[ "postdate" ] } )
+            # dirItem.listitem.setInfo( "video", { "Title": video[ "title" ], "Overlay": overlay, "Size": video[ "size" ], "Year": year, "Plot": video[ "plot" ], "PlotOutline": video[ "plot" ], "Genre": video[ "genre" ], "Studio": video[ "studio" ], "Director": video[ "director" ], "Duration": video[ "runtime" ], "Cast": video[ "cast" ], "Date": video[ "postdate" ] } )
+            dirItem.listitem.setInfo( "video", { "Title": video[ "title" ], "Overlay": overlay, "Size": video[ "size" ], "Year": year, "Plot": video[ "plot" ], "PlotOutline": video[ "plot" ], "Genre": video[ "genre" ], "Studio": video[ "studio" ], "Director": video[ "director" ], "Duration": video[ "runtime" ][:2], "Cast": video[ "cast" ]} )
             # set release date property
             dirItem.listitem.setProperty( "releasedate", release_date )
             dirItem.listitem.setProperty( "fanart_image", video[ "fanart" ] )
@@ -342,6 +346,7 @@ class Main:
         self.settings[ "extra" ] = ( self.Addon.getSetting( "extra" ) == "true" )
         self.settings[ "originaltitle" ] = ( self.Addon.getSetting( "originaltitle" ) == "true" )
         self.settings[ "showtype" ] = ( self.Addon.getSetting( "showtype" ) == "true" )
+        self.settings[ "max_previews" ] = self.Addon.getSetting( "max_previews" )
         if (self.settings[ "type" ] == "all" and self.settings[ "quality" ] == "all"):
             self.settings[ "showtype" ] = True
         self.settings[ "country" ] = [ int( self.Addon.getSetting( "country" ) ) ]
@@ -378,10 +383,11 @@ class Main:
                 if search_phrase == '':
                     return -1
                 curr_phrase = search_phrase
-                base_url = self.BASE_CURRENT_URL % (self.settings[ "region" ],self.settings[ "product" ],self.settings[ "channel_id" ],search_phrase)
+                base_url = self.BASE_CURRENT_URL % (self.settings[ "region" ],self.settings[ "product" ],self.settings[ "max_previews" ],self.settings[ "channel_id" ],search_phrase)
             else:
-                base_url = self.BASE_CURRENT_URL % (self.settings[ "region" ],self.settings[ "product" ],self.settings[ "channel_id" ])
-            #print "base_url %s" % base_url
+                base_url = self.BASE_CURRENT_URL % (self.settings[ "region" ],self.settings[ "product" ],self.settings[ "max_previews" ],self.settings[ "channel_id" ])
+            # print di url for get lists of video previews
+            print "DEBUG: base_url= %s" % base_url
             #
             # get the source files date if it exists
             try: date = os.path.getmtime( base_path )
@@ -390,21 +396,42 @@ class Main:
             if self.ITEM_CURRENT_URL == '99':
                 refresh = True
             else:
+                #refresh = ( ( time.time() - ( 24 * 60 * 60 ) ) >= date )
                 refresh = ( ( time.time() - ( 24 * 60 * 60 ) ) >= date )
             # only fetch source if it's been more than a day
+            print "DEBUG: open"
             if ( refresh ):
                 # open url
-                usock = urllib.urlopen( base_url )
+                # req = urllib2.Request( base_url )
+                # usock = urllib2.urlopen( req, timeout=60 )
+                # usock = urllib2.urlopen( base_url , timeout = 60)
+                # usock = urllib.urlopen( base_url )
+                
+                user_agent = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows NT)'
+                headers = { 'User-Agent' : user_agent }
+                req = urllib2.Request(base_url, None, headers)
+                try:
+                    usock = urllib2.urlopen( req , timeout = 60)
+                except urllib2.HTTPError, e:
+                    print "URLLIB2 HTTPError: code=%s msg=%s header=%s fp.read=%s" % (e.code , e.msg , e.headers , e.fp.read()) 
+                # save file versione
+                # urllib.urlretrieve(base_url,base_path)
+                # usock = open( base_path, "r" )
             else:
                 # open path
                 usock = open( base_path, "r" )
             # format xml source
+            print "DEBUG: start"
+            #xmlSource = usock.read()
             xmlSource = ''
             for line in usock.read().split( '\n' ):
                 xmlSource += line.lstrip().rstrip().replace( '\r', '' ).replace( '\t', '' ).replace( '\n', '' )
-
+            print "DEBUG: end"
+            #
+            # print "DEBUG: xmlSource= %s" % xmlSource
             # close socket
             usock.close()
+            #print "DEBUG: close"
             # save the xmlSource for future parsing
             if ( refresh ):
             	ok = self.save_xml_source( xmlSource )
