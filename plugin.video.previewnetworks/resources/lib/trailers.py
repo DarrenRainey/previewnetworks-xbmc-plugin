@@ -234,19 +234,8 @@ class _Parser:
             # set total items
             dirItem.totalItems = total
             # set the default icon
-            #icon = "DefaultVideo.png"
-            #icon = os.path.join(os.getcwd(),'resource','images','list.png')
             icon = os.path.join(self.Addon.getAddonInfo('path'),'resource','images','list.png')
             overlay = ( xbmcgui.ICON_OVERLAY_NONE, xbmcgui.ICON_OVERLAY_HD, )[ video["quality"] == "HD 480p" or video["quality"] == "HD 720p" or video["quality"] == "HD 1080p"]
-
-##            if video["quality"] == "HD 480p":
-##                overlay = os.path.join(os.getcwd(),'resource','images','480.png')
-##            elif video["quality"] == "HD 720p":
-##                overlay = os.path.join(os.getcwd(),'resource','images','720.png')
-##            elif video["quality"] == "HD 1080p":
-##                overlay = os.path.join(os.getcwd(),'resource','images','1080.png')
-##            else:
-##                overlay = xbmcgui.ICON_OVERLAY_NONE
 
             # only need to add label and thumbnail, setInfo() and addSortMethod() takes care of label2
             dirItem.listitem = xbmcgui.ListItem( video[ "title" ], iconImage=icon, thumbnailImage=video[ "poster" ])
