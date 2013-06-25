@@ -1,5 +1,5 @@
 """
-    Plugin for streaming from "preview network"
+   Plugin for streaming from "preview network"
 """
 
 # main imports
