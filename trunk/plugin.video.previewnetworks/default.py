@@ -1,5 +1,5 @@
 """
-    Plugin for streaming Preview network 
+    Plugin for streaming Preview network
 """
 
 # main imports
@@ -52,8 +52,8 @@ def categories(root):
     next_icon = os.path.join(Addon.getAddonInfo('path'), 'resources','images', 'next.png')
     genre_icon = os.path.join(Addon.getAddonInfo('path'), 'resources','images', 'genre.png')
     search_icon = os.path.join(Addon.getAddonInfo('path'), 'resources','images', 'search.png')
-##   baseurl="http://%s.feed.previewnetworks.com/v3.1/%s/"
-    baseurl="http://%s.hdplus.previewnetworks.com/v3.1/%s/"
+    baseurl="http://%s.feed.previewnetworks.com/v3.1/%s/"
+    #baseurl="http://%s.hdplus.previewnetworks.com/v3.1/%s/"
 
     if root:
         addDir(Addon.getLocalizedString(30301),baseurl+'now-%s/%s',1,now_icon)
