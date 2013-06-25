@@ -1,5 +1,5 @@
 """
-    Plugin for streaming Preview network
+   Plugin for streaming Preview network 
 """
 
 # main imports
