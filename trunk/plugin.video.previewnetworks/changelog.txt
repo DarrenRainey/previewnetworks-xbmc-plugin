@@ -1,5 +1,5 @@
 [B]2.3.4[/B]
-- little fix
+- upgrade to new function and little fix
 
 [B]2.3.3[/B]
 - same bug fix and other optimizations
